@@ -12,4 +12,7 @@ We want to look at hospital specializations, locations/proximity to cities, etc.
 has two files iwth coordinates, tons of info, ratings, mortality, trauma level, etc.
 
 * need API and HTML Data ??????
+* use d3.json to filter through each row in the kaggle table
+* try to incorporate some demographics data to fullfill the purpose and goal of this project's storytelling
+* Use the kaggle site to get started on code and loop through each row to pull the data
 * 
