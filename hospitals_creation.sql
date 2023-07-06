@@ -1,16 +1,20 @@
 CREATE TABLE hospital_info (
-	hospital_name VARCHAR(50) NOT NULL PRIMARY KEY,
-	address VARCHAR(60),
-	city VARCHAR(50),
-	state VARCHAR(2),
+	hospital_name VARCHAR NOT NULL PRIMARY KEY,
+	address VARCHAR,
+	city VARCHAR,
+	state VARCHAR,
 	zip INT,
-	county VARCHAR(30),
-	hospital_type VARCHAR(50),
-	ownership VARCHAR(60),
+	county VARCHAR,
+	hospital_type VARCHAR,
+	ownership VARCHAR,
 	emergency_services BOOLEAN,
-	overall_rating FLOAT
+	overall_rating REAL
 );
-	
+
+drop table hospital_locations;
+drop table hospital_info; 
+
+
 CREATE TABLE hospital_locations (
 	hospital_name VARCHAR(50) NOT NULL PRIMARY KEY,
 	address VARCHAR(50),
@@ -29,4 +33,9 @@ CREATE TABLE hospital_locations (
 	FOREIGN KEY (hospital_name) REFERENCES hospital_info(hospital_name)
 );
 
+
+COPY hospital_locations(NAME, ADDRESS, CITY, STATE, ZIP, TYPE, STATUS, POPULATION, COUNTY, LATITUDE, LONGITUDE, OWNER, BEDS, HELIPAD)
+FROM 'clean_location_df.csv'
+DELIMITER ','
+CSV HEADER;
 
