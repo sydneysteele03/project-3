@@ -9,6 +9,9 @@ PLAN FOR PROJECT:
 5. Start implementing into JavaScript file. We can use marker clusters to cluster points (large dataset, see 15.2 activity 3)
 6. New javascript library recommended is Angular. Should help with visualizations.
 7. 3 visualizations total: map (we can do interavtive options here), bar chart, and another vis. Only one interaction needed.
+   * interactive map to toggle between characteristics: specialties, helipad, hospital type, number of beds, etc.
+   * bar chart for numebr with highest ratings, how many hospitals in each state with high ratings
+   * cluster map (similar to earthquake HW) for ratings - bigger clusters = better ratings (could also do this with number of beds)
 
 
 ***********************
