@@ -35,7 +35,9 @@ CREATE TABLE hospital_locations (
 
 
 COPY hospital_locations(NAME, ADDRESS, CITY, STATE, ZIP, TYPE, STATUS, POPULATION, COUNTY, LATITUDE, LONGITUDE, OWNER, BEDS, HELIPAD)
-FROM 'clean_location_df.csv'
+FROM 'Desktop/project-3/clean_location_df.csv'
 DELIMITER ','
 CSV HEADER;
 
+select * from hospital_info;
+select * from hospital_locations;
