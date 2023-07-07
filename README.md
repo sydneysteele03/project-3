@@ -9,6 +9,7 @@ PLAN FOR PROJECT:
 5. Start implementing into JavaScript file. We can use marker clusters to cluster points (large dataset, see 15.2 activity 3)
 6. New javascript library recommended is Angular. Should help with visualizations.
 7. 3 visualizations total: map (we can do interavtive options here), bar chart, and another vis. Only one interaction needed.
+* test 
 
 
 ***********************
