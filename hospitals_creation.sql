@@ -11,9 +11,6 @@ CREATE TABLE hospital_info (
 	overall_rating REAL
 );
 
-drop table hospital_locations;
-drop table hospital_info; 
-
 
 CREATE TABLE hospital_locations (
 	hospital_name VARCHAR(50) NOT NULL PRIMARY KEY,
@@ -33,11 +30,6 @@ CREATE TABLE hospital_locations (
 	FOREIGN KEY (hospital_name) REFERENCES hospital_info(hospital_name)
 );
 
-
-COPY hospital_locations(NAME, ADDRESS, CITY, STATE, ZIP, TYPE, STATUS, POPULATION, COUNTY, LATITUDE, LONGITUDE, OWNER, BEDS, HELIPAD)
-FROM 'Desktop/project-3/clean_location_df.csv'
-DELIMITER ','
-CSV HEADER;
 
 select * from hospital_info;
 select * from hospital_locations;
