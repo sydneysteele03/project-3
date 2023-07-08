@@ -13,8 +13,8 @@ CREATE TABLE hospital_info (
 
 
 CREATE TABLE hospital_locations (
-	hospital_name VARCHAR(50) NOT NULL PRIMARY KEY,
-	address VARCHAR(50),
+	hospital_name VARCHAR NOT NULL PRIMARY KEY,
+	address VARCHAR,
 	city VARCHAR(50),
 	state VARCHAR(2),
 	zip INT,
@@ -24,9 +24,9 @@ CREATE TABLE hospital_locations (
 	county VARCHAR(20),
 	latitude FLOAT,
 	longitude FLOAT,
-	owner VARCHAR(20),
+	owner VARCHAR,
 	beds INT,
-	helipad VARCHAR(2),
+	helipad VARCHAR,
 	FOREIGN KEY (hospital_name) REFERENCES hospital_info(hospital_name)
 );
 
