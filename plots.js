@@ -49,6 +49,7 @@ function update(data) {
 
 d3.csv('https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv', convertRow).then(function(data) {
     update(data);
+    console.log(data);
 });
 
 
