@@ -20,7 +20,7 @@ let map = L.map("", {
   center: [x, y],
   zoom: INT,
   layer: [streetmap, hospitalLocations]
-};
+});
 // layer control, pass it baseMaps and Overlay maps. Add layer control to the map
 L.control.layers(baseMaps, overlayMaps, {
   collapsed: false}).addTo(map);
