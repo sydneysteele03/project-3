@@ -20,7 +20,6 @@ CREATE TABLE hospital_locations (
 	zip INT,
 	type VARCHAR(50),
 	status VARCHAR(10),
-	population INT,
 	county VARCHAR(20),
 	latitude FLOAT,
 	longitude FLOAT,
@@ -33,3 +32,4 @@ CREATE TABLE hospital_locations (
 
 select * from hospital_info;
 select * from hospital_locations;
+

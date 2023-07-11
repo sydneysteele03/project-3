@@ -6,10 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title></title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
 <body>
+  <!-- create header and top of html page summary-->
 <div class="container">
   <div class="row">
     <div class="col-md-12 jumbotron text-center">
@@ -24,6 +26,9 @@
       <p> Mirtha and Sydney Project 3</p>
     </div>
   </div>
+
+
+  <!-- our table of location data example -->
   <div id="content">
   <table border="1">
     <tr> 
@@ -44,6 +49,10 @@
 </div>
 </div>
 
+<!-- div that holds our map-->
+<div id="map-id"></div>
+
+<!-- our JavaScript file-->
 <script src='https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'></script>
 <script src="plots.js"></script>
 
