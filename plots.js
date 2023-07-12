@@ -13,7 +13,9 @@ function createMap(hospitalLocations) {
   };
 
   let map = L.map("map-id", {
-    center: [x, y],
+    // center of west coast looked like ashland, OR
+    center: [42.1946, 122.7095],
+    //set zoom to west coast only 
     zoom: 5,
     layers: [westMap, hospitalLocations]
   });
@@ -23,8 +25,17 @@ function createMap(hospitalLocations) {
 
 function createMarkers(response) {
 //need to loop through "array" of hospital locations and bindPopup marker for each hospital ???
-  let 
+  let hospitals = 10//pinpoint how to get hospital locations x,y;
+  let hMarkers = [];
+  for(let i = 0; i <hospitals.length; i++) {
+    let hospital = hospitals[i];
+    let hMarker = L.marker([hospital.latitidue, hospital.longitude]).bindPopup(""+hospital.name+ "Rated:" + hospital.overall_rating+ "");
+    hMarkers.push(hMarker);
+  }
+
+  createMap(L.layerGroup(hMarkers));
 }
 
-
+//d3.csv local file path 
+d3.csv("").then(createMarkers);
 
