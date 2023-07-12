@@ -1,41 +1,62 @@
-// creating three visualizations, one interactive, for our west coast hospital analysis data. 
-function createMap(hospitalLocations) {
-  let westMap = L.tilelayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  });
+// functions to read in csv data and create visual html plots 
+let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
+//let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv'
 
-  let baseMaps = {
-    "West Coast Map": westMap
-  };
+d3.csv(geoData). then(function(locationinfo){
 
-  let overlayMaps = {
-    "Hospital Locations": hospitalLocations
-  };
+  console.log(locationinfo);
+  createFeatures(locationinfo.features);
 
-  let map = L.map("map-id", {
-    // center of west coast looked like ashland, OR
-    center: [42.1946, 122.7095],
-    //set zoom to west coast only 
-    zoom: 5,
-    layers: [westMap, hospitalLocations]
-  });
+})
 
-  L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(map);
+function createMarker(feature, latlng){
+
+  return L.circleMarker(latlng, {
+    radius: markerSize(feature.columns.beds),
+    //fillColor: markerColor(feature.),
+    weight: 0.5,
+    opacity: 0.5,
+    fillOpacity: 1
+ });
+
 }
 
-function createMarkers(response) {
-//need to loop through "array" of hospital locations and bindPopup marker for each hospital ???
-  let hospitals = 10//pinpoint how to get hospital locations x,y;
-  let hMarkers = [];
-  for(let i = 0; i <hospitals.length; i++) {
-    let hospital = hospitals[i];
-    let hMarker = L.marker([hospital.latitidue, hospital.longitude]).bindPopup(""+hospital.name+ "Rated:" + hospital.overall_rating+ "");
-    hMarkers.push(hMarker);
-  }
-
-  createMap(L.layerGroup(hMarkers));
+function createFeatures(locationinfo){
+  
+  function onEachFeature(feature, layer) {
+    layer.bindPopup(`<h3>Name:</h3> ${feature.columns.name}<h3> Address:</h3> ${feature.columns.address}<h3> Status:</h3> 
+    ${feature.columns.status}}`);
 }
 
-//d3.csv local file path 
-d3.csv("").then(createMarkers);
+  let location = L.geoJSON(locationinfo, {
+      onEachFeature: onEachFeature,
+      pointToLayer: createMarker
+});
 
+
+function createMap(location){
+
+    let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+     });
+
+    let myMap = L.map("map", {
+       center: [37.09, -95.71],
+       zoom: 5,
+       layers: [street, location]
+    });
+
+    let baseMaps = {
+       "street Map": street
+     };
+
+    let overlayMaps = {
+       Locations: locations
+     };
+
+     L.control.layers(baseMaps, overlayMaps, {
+       collapsed: false
+      }).addTo(myMap);
+
+};
+}
