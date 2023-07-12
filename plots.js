@@ -1,41 +1,114 @@
-// creating three visualizations, one interactive, for our west coast hospital analysis data. 
-function createMap(hospitalLocations) {
-  let westMap = L.tilelayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  });
+// functions to read in csv data and create visual html plots 
+let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
+//let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv'
 
-  let baseMaps = {
-    "West Coast Map": westMap
-  };
+d3.csv(geoData). then(function(locationinfo){
 
-  let overlayMaps = {
-    "Hospital Locations": hospitalLocations
-  };
+  console.log(locationinfo);
+  createFeatures(locationinfo.features);
 
-  let map = L.map("map-id", {
-    // center of west coast looked like ashland, OR
-    center: [42.1946, 122.7095],
-    //set zoom to west coast only 
-    zoom: 5,
-    layers: [westMap, hospitalLocations]
-  });
+})
 
-  L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(map);
+function createMarker(feature, latlng){
+
+  return L.circleMarker(latlng, {
+    radius: markerSize(feature.columns.beds),
+    //fillColor: markerColor(feature.),
+    weight: 0.5,
+    opacity: 0.5,
+    fillOpacity: 1
+ });
+
 }
 
-function createMarkers(response) {
-//need to loop through "array" of hospital locations and bindPopup marker for each hospital ???
-  let hospitals = 10//pinpoint how to get hospital locations x,y;
-  let hMarkers = [];
-  for(let i = 0; i <hospitals.length; i++) {
-    let hospital = hospitals[i];
-    let hMarker = L.marker([hospital.latitidue, hospital.longitude]).bindPopup(""+hospital.name+ "Rated:" + hospital.overall_rating+ "");
-    hMarkers.push(hMarker);
-  }
-
-  createMap(L.layerGroup(hMarkers));
+function createFeatures(locationinfo){
+  
+  function onEachFeature(feature, layer) {
+    layer.bindPopup(`<h3>Name:</h3> ${feature.columns.name}<h3> Address:</h3> ${feature.columns.address}<h3> Status:</h3> 
+    ${feature.columns.status}}`);
 }
 
-//d3.csv local file path 
-d3.csv("").then(createMarkers);
+  let location = L.geoJSON(locationinfo, {
+      onEachFeature: onEachFeature,
+      pointToLayer: createMarker
+});
 
+
+function createMap(location){
+
+    let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+     });
+
+    let myMap = L.map("map", {
+       center: [37.09, -95.71],
+       zoom: 5,
+       layers: [street, location]
+    });
+
+    let baseMaps = {
+       "street Map": street
+     };
+
+    let overlayMaps = {
+       Locations: locations
+     };
+
+     L.control.layers(baseMaps, overlayMaps, {
+       collapsed: false
+      }).addTo(myMap);
+
+};
+}
+
+//}
+// create html table from data
+// function update(data) {
+//     d3.select('#content tbody')
+//       .selectAll('tr')
+//       .data(data)
+//       .join('tr')
+//       .html(function(d) {
+//         let html = '<tr>';
+//         html += '<td>' + d.name + '</td>';
+//         html += '<td>' + d.address + '</td>';
+//         html += '<td>' + d.city + '</td>';
+//         html += '<td>' + d.state + '</td>';
+//         html += '<td>' + d.zip + '</td>';
+//         html += '<td>' + d.type + '</td>';
+//         html += '<td>' + d.status + '</td>';
+//         html += '<td>' + d.county + '</td>';
+//         html += '<td>' + d.latitude + '</td>';
+//         html += '<td>' + d.longitude + '</td>';
+//         html += '<td>' + d.owner + '</td>';
+//         html += '<td>' + d.beds + '</td>';
+//         html += '<td>' + d.helipad + '</td>';
+//         html += '</tr>';
+//         return html;
+//       });
+//   }
+
+
+//   //convert datatypes from string to numbers, to match csv types using + 
+//   function convertRow(d) {
+//     return {
+//       name: d.name,
+//       address: d.address,
+//       city: d.city,
+//       state: d.state,
+//       zip: +d.city,
+//       type: d.growth,
+//       status: d.revenue,
+//       county: d.industry,
+//       latitude: +d.latitude,
+//       longitude: +d.longitude,
+//       owner: d.owner,
+//       beds: +d.beds,
+//       helipad: d.helipad
+//     }
+//   }
+
+
+// d3.csv('https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv', convertRow).then(function(data) {
+//     update();
+// });
