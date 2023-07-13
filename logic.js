@@ -26,53 +26,52 @@ function select(nextHospital) {
 }
 
 //create bar chart of the top rated hospitals
-function createBarChart(response) {
-  let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
-  d3.csv(hospData).then((data) => {
+// function createBarChart(response) {
+//   let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
+//   d3.csv(hospData).then((data) => {
 
-    // this all probably needs to be in a for loop or fixed when data array is made (?):
-    let hospitals = data['Hospital Name'];
+//     // this all probably needs to be in a for loop or fixed when data array is made (?):
+//     let hospitals = data['Hospital Name'];
 
-    let chartSpecs = [
-      {
-        y: hospital_rating,
-        x: hospital_name,
-        text: hospital_name,
-        type: 'bar',
-        orientation: 'h',
-      }
-    ];
-    Plotly.newPlot('bar', chartSpecs, {title: "Top Rated hospitals on the West Coast", xaxis: {title: "Hospitals"}});
-  });
-}
+//     let chartSpecs = [
+//       {
+//         y: hospital_rating,
+//         x: hospital_name,
+//         text: hospital_name,
+//         type: 'bar',
+//         orientation: 'h',
+//       }
+//     ];
+//     Plotly.newPlot('bar', chartSpecs, {title: "Top Rated hospitals on the West Coast", xaxis: {title: "Hospitals"}});
+//   });
+// }
 
 //create the demographics table for each hospital on dropdown menu
-function demographicInfo(response) {
+function demographicInfo(hospitalInfo) {
   let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv'
   d3.csv(hospData).then((data) => {
-
-    // let demographics = d3.select("#response-hospInfo");
-    // demographics.append(data['State']);
-    // demographics.html("");  
-    // let result = data['State'];
-    // for (r in result) {
-    //   demographics.append("h6").text(`${r.toUpperCase()}: ${result[r]}`);
-    // };
-
-    for (i = 0; i < data.length; i++) {
-      
-      let resultArray = [];
-      resultArray= [data[i]["City"], data[i]["State"], data[i]['Hospital Type'], data[i]["Hospital Ownership"], data[i]["Hospital Overall Rating"]];
-      let result = resultArray[0];
-      let demographics = d3.select("#response-hospInfo");
-      demographics.append([data[i]["City"], data[i]["State"], data[i]['Hospital Type'], data[i]["Hospital Ownership"], data[i]["Hospital Overall Rating"]]);
+    let hospitalInfo = []
+    for (let i = 0; i < hospitalInfo; i++) {
+      let hospital = hospitalInfo[i]
+      let selectedHospital = hospitalInfo.filter((hospital) => {
+        return hospital.name ==hospital["Hospital Name"]
+      })
+      console.log(selectedHospital);
+      let hospitalStas = d3.select("#response-hospInfo");
+      hospitalStats.append([data[i]["City"], data[i]["State"], data[i]['Hospital Type'], data[i]["Hospital Ownership"], data[i]["Hospital Overall Rating"]]);
       //need this to reset the table
       demographics.html("");
       //get values and table info to match for overivew display 
       for (r in result) {
         demographics.append("h6").text(`${r.toUpperCase()}: ${result[r]}`);
       };
-    };
+    }
+      
+  });
+}
+
+// Initialize the hospital overview table
+init();
     
     //how to separate data by commas for each value for each row??? 
     //let resultArray = []
@@ -87,10 +86,10 @@ function demographicInfo(response) {
     // let ownership = data.columns['Hospital Ownership'];
     // let rating = data.columns['Hospital overall rating'];
 
-  });
-}
-// Initialize the hospital overview table
-init();
+
+
+
+
 
 
 
