@@ -6,17 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title></title>
-
-
   <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="project-3/westcoast_loc_df.csv"></script>
+  
 
-
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+
+  <!-- Our CSS -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <!-- Leaflet SRC-->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+   <!-- JavaScript .js-->
+  <script src="plots.js"></script>
+  
 </head>
 
 <body>
-  <!-- create header and top of html page summary-->
 <div class="container">
   <div class="row">
     <div class="col-md-12 jumbotron text-center">
@@ -31,37 +45,34 @@
       <p> Mirtha and Sydney Project 3</p>
     </div>
   </div>
-
-
-  <!-- our table of location data example -->
-  <div id="content">
-  <table border="1">
-    <tr> 
-      <td>Hospital Name</td>
-      <td>Address</td>
-      <td>City</td>
-      <td>State</td>
-      <td>Zip Code</td>
-      <td>Hospital Type</td>
-      <td>Status</td>
-      <td>County</td>
-      <td>Latitude</td>
-      <td>Longitude</td>
-      <td>Ownder</td>
-      <td>Helipad</td>
-    </tr>
-  </table>
-</div>
 </div>
 
-<!-- div that holds our map-->
-<div id="map-id"></div>
+<div id="map"></div>
 
-<!-- our JavaScript file-->
-<script src='https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'></script>
-<script src="plots.js"></script>
-
+    <!-- create hospital overview chart dropdown -->
+    <div class="row">
+      <div class="col-md-2">
+        <div class="well">
+          <h5>Hospital Name:</h5>
+          <select id="selDataset" onchange="select(this.value)"></select>
+        </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Hospital Overview</h3>
+          </div>
+          <div id="response-hospInfo" class="panel-body"></div>
+        </div>
+        <div class="col-md-5">
+          <div id="bar"></div>
+        </div>
+      </div>
+  </div>
+  
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="logic.js"></script>
+  
 </body>
 
-</html>
 
+
+</html>
