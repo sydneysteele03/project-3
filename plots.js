@@ -9,7 +9,7 @@ function createMap(location){
    });
 
   let myMap = L.map("map", {
-     center: [37.09, -95.71],
+     center: [36.778259, -119.417931],
      zoom: 5,
      layers: [street, location]
   });
@@ -28,39 +28,25 @@ function createMap(location){
 
 };
 
-function createMarker(feature, latlng){
+function createMarker(locationInfo){
 
-  return L.circleMarker(latlng, {
-    radius: markerSize(feature.columns.beds),
-    //fillColor: markerColor(feature. INSERT RATING PATH),
-    weight: 0.5,
+  return L.circleMarker(locationInfo, {
+    radius: markerSize(locationInfo.columns.beds),
+    fillColor: markerColor(hospitalInfo.columns.longitude[2]),
+    weight: 1,
     opacity: 0.5,
     fillOpacity: 1
  });
-}
-
-function createMarkers(response){
-  let hospitals = response.columns.name;
-
-  let hospitalMarkers = [];
-
-  for (let index = 0; index < name.length; index++){
-    let hospital = hospitals[index];
-
-    let hospitalMarker = L.marker([columns.latitude, columns.longitude]).bindPopup(`<h3>Name:</h3> ${feature.columns.name}<h3> Address:</h3> ${feature.columns.address}<h3> Status:</h3>${feature.columns.status}
-    ${feature.columns.status}`);
-  }
-
 };
 
-function createFeatures(locationinfo){
+function createFeatures(locationInfo, hospitalInfo){
   
   function onEachFeature(feature, layer) {
-    layer.bindPopup(`<h3>Name:</h3> ${feature.columns.name}<h3> Address:</h3> ${feature.columns.address}<h3> Status:</h3> 
-    ${feature.columns.status}`);
+    layer.bindPopup(`<h3>Name:</h3> ${hospitalInfo.columns.name}<h3> Address:</h3> ${feature.columns.address}<h3> Status:</h3> 
+    ${hospitalInfo.columns.Hospital overall rating}`);
 }
 
-  let location = L.geoJSON(locationinfo, {
+  let location = L.geoJSON(locationInfo, {
       onEachFeature: onEachFeature,
       pointToLayer: createMarker
   });
@@ -76,54 +62,5 @@ d3.csv(geoData).then(locationInfo => {
 })
 
 
-//}
-// create html table from data
-// function update(data) {
-//     d3.select('#content tbody')
-//       .selectAll('tr')
-//       .data(data)
-//       .join('tr')
-//       .html(function(d) {
-//         let html = '<tr>';
-//         html += '<td>' + d.name + '</td>';
-//         html += '<td>' + d.address + '</td>';
-//         html += '<td>' + d.city + '</td>';
-//         html += '<td>' + d.state + '</td>';
-//         html += '<td>' + d.zip + '</td>';
-//         html += '<td>' + d.type + '</td>';
-//         html += '<td>' + d.status + '</td>';
-//         html += '<td>' + d.county + '</td>';
-//         html += '<td>' + d.latitude + '</td>';
-//         html += '<td>' + d.longitude + '</td>';
-//         html += '<td>' + d.owner + '</td>';
-//         html += '<td>' + d.beds + '</td>';
-//         html += '<td>' + d.helipad + '</td>';
-//         html += '</tr>';
-//         return html;
-//       });
-//   }
 
 
-//   //convert datatypes from string to numbers, to match csv types using + 
-//   function convertRow(d) {
-//     return {
-//       name: d.name,
-//       address: d.address,
-//       city: d.city,
-//       state: d.state,
-//       zip: +d.city,
-//       type: d.growth,
-//       status: d.revenue,
-//       county: d.industry,
-//       latitude: +d.latitude,
-//       longitude: +d.longitude,
-//       owner: d.owner,
-//       beds: +d.beds,
-//       helipad: d.helipad
-//     }
-//   }
-
-
-// d3.csv('https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv', convertRow).then(function(data) {
-//     update();
-// });
