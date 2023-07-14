@@ -71,17 +71,19 @@ function createBarChart(hospitalRating) {
     let fourstar = 0;
     let fivestar = 0;
 
-    for (let i = 0; i< data.length; i++) {
+    console.log(hospResult);
+
+    for (let i = 0; i< hospResult.length; i++) {
       //if statements to separate rating counts
-      if (hospitalRating == 1.0) {
+      if (hospitalRating[i] == "1.0") {
         onestar++;
-      } else if (hospitalRating == 2.0) {
+      } else if (hospitalRating[i] == "2.0") {
         twostar++;
-      }else if (hospitalRating == 3.0) {
+      }else if (hospitalRating[i] == "3.0") {
         threestar++;
-      }else if (hospitalRating == 4.0) {
+      }else if (hospitalRating[i] == "4.0") {
         fourstar++;
-      }else if (hospitalRating == 5.0) {
+      }else if (hospitalRating[i] == "5.0") {
         fivestar++;
       }
     }
@@ -92,12 +94,9 @@ function createBarChart(hospitalRating) {
     {
       y: stars,
       x: ratings,
-      //text: hospital_rating,
       type: 'bar'
-      //orientation: 'h',
     }];
-    //make the plot 
-    Plotly.newPlot('bar', chartSpecs);
+    Plotly.newPlot('bar', chartSpecs, {title: "Ratings of West Coast Hospitals", xaxis: {title: "Rating (1-5 scale)"}});
 
   });
  }
