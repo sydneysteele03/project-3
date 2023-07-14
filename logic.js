@@ -86,7 +86,7 @@ function createBarChart(response) {
     let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
     let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
     d3.csv(hospData).then((data) => {
-    d3.csv(geoData).then((data) => {
+    
       // set pie chart info
       let result = data.filter((hospital)=> {
         return hospital_name = hospital["Hospital Name"]
@@ -100,28 +100,34 @@ function createBarChart(response) {
       let threestar = 0;
       let fourstar = 0;
       let fivestar = 0;
+      let sixstar = 0;
   
-      for (let i = 0; i< hospitalRating.length; i++) {
+      for (let i = 0; i< hospital_owner.length; i++) {
         //if statements to separate rating counts
-        if (hospitalRating[i]["Hospital overall rating"] == "1.0") {
+        if (hospital_owner[i]["Hospital Ownership"] == ["Government - Hospital District or Authority"]) {
           onestar++;
-        } else if (hospitalRating[i]["Hospital overall rating"] == "2.0") {
+        } else if (hospital_owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Church"]) {
           twostar++;
-        }else if (hospitalRating[i]["Hospital overall rating"] == "3.0") {
+        }else if (hospital_owner[i]["Hospital Ownership"] == ["Government - Hospital District or Authority"]) {
           threestar++;
-        }else if (hospitalRating[i]["Hospital overall rating"] == "4.0") {
+        }else if (hospital_owner[i]["Hospital Ownership"] == ["Government - Local"]) {
           fourstar++;
-        }else if (hospitalRating[i]["Hospital overall rating"] == "5.0") {
+        }else if (hospital_owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Private"]) {
           fivestar++;
-        }
+        }else if (hospital_owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Other"]) {
+          sixstar++;
       }
-
+    }
+    let ownership = ["Government - Hospital District or Authority", "Voluntary non-profit - Church", "Government - Hospital District or Authority", "Government - Local, Voluntary non-profit - Private", "Voluntary non-profit - Other"]; 
+    let stars = [onestar, twostar, threestar, fourstar, fivestar, sixstar];
+    console.log(ownership);
+    console.log(stars);
       //let hospital_name = data['Hospital Name'];
       //let hospital_ownership = data["Hospital Ownership"];
         
       let data2 = [{
-            values: hospital_name,
-            labels: hospital_owner,
+            values: ownership,
+            labels: stars,
             type: 'pie',
             textposition: 'outside',
             automargin: true
@@ -134,9 +140,9 @@ function createBarChart(response) {
             showlegend: false
             }];
 
-          Plotly.newPlot('pie', data2, layout, {title: "Top"}); 
+          Plotly.newPlot('pie', data2, layout); 
   });
-  });
+ 
 } 
   // Initialize the hospital overview table
   init();
