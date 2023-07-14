@@ -1,8 +1,5 @@
 // this creates the interactive drop down overview dashboard for each hospital in our dataset. 
 
-//let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv'
-//let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
-
 function init() {
   let dropdown = d3.select("#selDataset");
   //create dropdown using hospital names
@@ -69,6 +66,7 @@ function createBarChart(hospitalRating) {
     let threestar = 0;
     let fourstar = 0;
     let fivestar = 0;
+    let topRated = []
 
     for (let i = 0; i< hospitalRating.length; i++) {
       //if statements to separate rating counts
@@ -82,6 +80,7 @@ function createBarChart(hospitalRating) {
         fourstar++;
       }else if (hospitalRating[i]["Hospital overall rating"] == "5.0") {
         fivestar++;
+        topRated.push(hospitalRating[i]["Hospital Name"]);
       }
     }
     let ratings = [1.0, 2.0, 3.0, 4.0, 5.0]; 
@@ -91,7 +90,7 @@ function createBarChart(hospitalRating) {
       y: stars,
       x: ratings,
       type: 'bar',
-      color:'rgba(222,45,38,0.8)'
+      marker: {color: 'rgb(173, 39, 9)'}
     }];
     Plotly.newPlot('bar', chartSpecs, {title: "Ratings of West Coast Hospitals", xaxis: {title: "Rating (1-5 scale)"}});
   });

@@ -27,14 +27,12 @@ body,
     position: relative;
     left: 20px;
     width: 95%;
-    height: 90%;
+    height: 98%;
     padding: 100;
     margin: 100;
 }
 
-#selDataset {
-    position: relative;
-    left: 10px;
-    width: 100%
-}
+
+
+
 
