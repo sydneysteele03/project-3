@@ -55,30 +55,55 @@ function demographicInfo(hospitalName) {
 });
 }
 
-//create bar chart of the top rated hospitals
-function createBarChart(response) {
+//create bar chart of number of hospitals for each rating 0-5. 
+function createBarChart(hospitalRating) {
   let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
-  let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
   d3.csv(hospData).then((data) => {
-    d3.csv(geoData).then((data) => {
-    // set bar chart info
-      let hospital_name = data['Hospital Name'];
-      let hospital_rating = data["Hospital Overall Rating"];
+    
+    // set bar chart info 
+    let hospResult = data.filter((hospital) => {
+      return hospitalRating == hospital['Hospital overall rating']
+    })
+    //initialize rating tallies
+    let onestar = 0;
+    let twostar = 0;
+    let threestar = 0;
+    let fourstar = 0;
+    let fivestar = 0;
 
-      let chartSpecs = [
-      {
-        y: hospital_rating,
-        x: hospital_name,
-        text: hospital_rating,
-        type: 'bar',
-        orientation: 'h',
-      }];
-      //make the plot 
-      Plotly.newPlot('bar', chartSpecs, {title: "Top Rated hospitals on the West Coast", xaxis: {title: "Hospitals"}});
-  });
+    for (let i = 0; i< data.length; i++) {
+      //if statements to separate rating counts
+      if (hospitalRating == 1.0) {
+        onestar++;
+      } else if (hospitalRating == 2.0) {
+        twostar++;
+      }else if (hospitalRating == 3.0) {
+        threestar++;
+      }else if (hospitalRating == 4.0) {
+        fourstar++;
+      }else if (hospitalRating == 5.0) {
+        fivestar++;
+      }
+    }
+    let ratings = [1.0, 2.0, 3.0, 4.0, 5.0]; 
+    let stars = [onestar, twostar, threestar, fourstar, fivestar];
+
+    let chartSpecs = [
+    {
+      y: stars,
+      x: ratings,
+      //text: hospital_rating,
+      type: 'bar'
+      //orientation: 'h',
+    }];
+    //make the plot 
+    Plotly.newPlot('bar', chartSpecs);
+
   });
  }
 
 // Initialize the hospital overview table
 init();
-    
+
+
+// hospitals with 5 star ratings 
