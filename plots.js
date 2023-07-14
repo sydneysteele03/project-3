@@ -38,18 +38,7 @@ function createMarker(locationInfo, hospitalInfo){
   }
   createMap(L.layerGroup(locationMarkers))
 };
-// function createFeatures(locationInfo, hospitalInfo){
-  
-//   function onEachFeature(feature, layer) {
-//     layer.bindPopup(`<h3>Name:</h3> ${hospitalInfo.columns.name}<h3> Address:</h3> ${feature.columns.address}<h3> Status:</h3> 
-//     ${hospitalInfo.columns["Hospital overall rating"]}`);
-// }
-//   let location = L.geoJSON(locationInfo, {
-//       onEachFeature: onEachFeature,
-//       pointToLayer: createMarker
-//   });
-//   createMap(location);
-// };
+
 d3.csv(geoData).then(locationInfo => {
   d3.csv(hospData).then(hospitalInfo =>{
     // console.log(locationInfo)

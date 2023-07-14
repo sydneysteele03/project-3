@@ -1,107 +1,142 @@
-// so far this is just some extra practice functions that haven't worked for anything 
+// this creates the interactive drop down overview dashboard for each hospital in our dataset. 
 
+//let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv'
+//let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
 
-// file for creating data visualizations 
+function init() {
+  let dropdown = d3.select("#selDataset");
+  //create dropdown using hospital names
+  let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
 
+  d3.csv(hospData).then((data) => {
+    for (let i = 0; i < data.length; i++){
+        dropdown.append("option").text(data[i]["Hospital Name"]).property("value", data[i]["Hospital Name"]);
+    };
 
-//create function createMap(hospitalLocations) 
-function createMap(hospitalLocations) {
-// create tile layer that will be the background map 
-let streetmap = L.tileLayer("" , {
-    attribution: ""});
-//create baseMaps object to hold streetmap layer
-let baseMaps = {
-  "Street Map": streetmap
-};
-// overlayMaps to hold hospitalLocations later 
-let overlayMaps = {
-    "Hospital Locations": hospitalLocations
-};
-//create map object with options
-let map = L.map("", {
-  //edit these variables 
-  center: [x, y],
-  zoom: INT,
-  layer: [streetmap, hospitalLocations]
-});
-// layer control, pass it baseMaps and Overlay maps. Add layer control to the map
-L.control.layers(baseMaps, overlayMaps, {
-  collapsed: false}).addTo(map);
+    let firstHospital = data[0]["Hospital Name"];
+    demographicInfo(firstHospital);
+    createBarChart(firstHospital);
+    createPieChart(data);
+  });
 }
 
-
-
-// new function createMarkers for hopsital location markers and name/info 
-function createMarkers(response) {
-//pull the name property from response.data (need to ID response and data) 
-let stations = response.data.stations;
-// initialize array (named hospitalMarkers) to hold hosptial markers 
-
-// loop through hospital location array
-
-  // for each hospital, create marker and bind popup with name 
-
-  // add marker to hospitalMarkers array
-
-// create layer group from array, pass to createMap function 
-
-
-
+// repeat for other hospital names
+function select(nextHospital) {
+  demographicInfo(nextHospital);
+  createBarChart(nextHospital);
+  createPieChart(data);
 }
-//perform API call to the [hospital API ???] to get station information. call createMarkers when it completes.
-  d3.json();
 
-// functions to read in csv data and create visual html plots 
+//create the demographics table for each hospital on dropdown menu
+function demographicInfo(hospitalName) {
+  let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv'
+  let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
+  d3.csv(hospData).then((data) => {
+    d3.csv(geoData).then((geo) => {
+      let hospResult = data.filter((hospital) => {
+        return hospitalName == hospital['Hospital Name']
+      })
+      let geoResult = geo.filter((hospital) => {
+        return hospitalName ==hospital.name
+      })
 
-// create html table from data
-function update(data) {
-  d3.select('#content tbody')
-    .selectAll('tr')
-    .data(data)
-    .join('tr')
-    .html(function(d) {
-      let html = '<tr>';
-      html += '<td>' + d.name + '</td>';
-      html += '<td>' + d.address + '</td>';
-      html += '<td>' + d.city + '</td>';
-      html += '<td>' + d.state + '</td>';
-      html += '<td>' + d.zip + '</td>';
-      html += '<td>' + d.type + '</td>';
-      html += '<td>' + d.status + '</td>';
-      html += '<td>' + d.county + '</td>';
-      html += '<td>' + d.latitude + '</td>';
-      html += '<td>' + d.longitude + '</td>';
-      html += '<td>' + d.owner + '</td>';
-      html += '<td>' + d.beds + '</td>';
-      html += '<td>' + d.helipad + '</td>';
-      html += '</tr>';
-      return html;
+      let demographics = d3.select("#response-hospInfo");
+      //clear table after reselction
+      demographics.html("");
+      // add the hospital info
+      demographics.append("h4").text(`Hospital Name: ${geoResult[0].name}`);
+      demographics.append("h4").text(`City: ${geoResult[0].city}`);
+      demographics.append("h4").text(`State: ${geoResult[0].state}`);
+      demographics.append("h4").text(`Overall Rating Score: ${hospResult[0]["Hospital overall rating"]}`);
+      demographics.append("h4").text(`Hospital Type: ${geoResult[0].type}`);
+      demographics.append("h4").text(`Ownership: ${geoResult[0].owner}`);
+      demographics.append("h4").text(`Number of Beds: ${geoResult[0].beds}`);
+      demographics.append("h4").text(`Helipad Available?: ${geoResult[0].helipad}`);
+      
     });
-}
-
-
-//convert datatypes from string to numbers, to match csv types using + 
-function convertRow(d) {
-  return {
-    name: d.name,
-    address: d.address,
-    city: d.city,
-    state: d.state,
-    zip: +d.city,
-    type: d.growth,
-    status: d.revenue,
-    county: d.industry,
-    latitude: +d.latitude,
-    longitude: +d.longitude,
-    owner: d.owner,
-    beds: +d.beds,
-    helipad: d.helipad
-  }
-}
-
-
-d3.csv('https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv', convertRow).then(function(data) {
-  update();
 });
+}
 
+//create bar chart of the top rated hospitals
+function createBarChart(response) {
+  let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
+  let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
+  d3.csv(hospData).then((data) => {
+    d3.csv(geoData).then((data) => {
+    // set bar chart info
+      let hospital_name = data['Hospital Name'];
+      let hospital_rating = data["Hospital Overall Rating"];
 
+      let chartSpecs = [
+        {
+          y: hospital_rating,
+          x: hospital_name,
+          text: hospital_rating,
+          type: 'bar',
+          orientation: 'h',
+        }];
+        //make the plot 
+        Plotly.newPlot('bar', chartSpecs, {title: "", xaxis: {title: "Hospitals"}});
+    });
+    });
+   }
+
+  // Creating pie chart of the different hospital ownership
+  function createPieChart(ownership){
+    let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
+    let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
+    d3.csv(hospData).then((data) => {
+    d3.csv(geoData).then((data) => {
+      // set pie chart info
+      let result = data.filter((hospital)=> {
+        return hospital_name = hospital["Hospital Name"]
+      })
+      let owner = data.filter((hospital)=> {
+        return hospital_owner = hospital["Hospital Ownership"]
+      })
+      
+      let onestar = 0;
+      let twostar = 0;
+      let threestar = 0;
+      let fourstar = 0;
+      let fivestar = 0;
+  
+      for (let i = 0; i< hospitalRating.length; i++) {
+        //if statements to separate rating counts
+        if (hospitalRating[i]["Hospital overall rating"] == "1.0") {
+          onestar++;
+        } else if (hospitalRating[i]["Hospital overall rating"] == "2.0") {
+          twostar++;
+        }else if (hospitalRating[i]["Hospital overall rating"] == "3.0") {
+          threestar++;
+        }else if (hospitalRating[i]["Hospital overall rating"] == "4.0") {
+          fourstar++;
+        }else if (hospitalRating[i]["Hospital overall rating"] == "5.0") {
+          fivestar++;
+        }
+      }
+
+      //let hospital_name = data['Hospital Name'];
+      //let hospital_ownership = data["Hospital Ownership"];
+        
+      let data2 = [{
+            values: hospital_name,
+            labels: hospital_owner,
+            type: 'pie',
+            textposition: 'outside',
+            automargin: true
+          }];
+      
+      var layout = [{
+            height: 400,
+            width: 400,
+            margin: {"t": 0, "b": 0, "l": 0, "r": 0},
+            showlegend: false
+            }];
+
+          Plotly.newPlot('pie', data2, layout, {title: "Top"}); 
+  });
+  });
+} 
+  // Initialize the hospital overview table
+  init();
