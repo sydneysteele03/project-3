@@ -15,14 +15,14 @@ function init() {
 
     let firstHospital = data[0]["Hospital Name"];
     demographicInfo(firstHospital);
-    createBarChart(firstHospital);
+    createBarChart(data);
   });
 }
 
 // repeat for other hospital names
 function select(nextHospital) {
   demographicInfo(nextHospital);
-  createBarChart(nextHospital);
+  createBarChart(data);
 }
 
 //create the demographics table for each hospital on dropdown menu
@@ -59,7 +59,6 @@ function demographicInfo(hospitalName) {
 function createBarChart(hospitalRating) {
   let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
   d3.csv(hospData).then((data) => {
-    
     // set bar chart info 
     let hospResult = data.filter((hospital) => {
       return hospitalRating == hospital['Hospital overall rating']
@@ -71,38 +70,32 @@ function createBarChart(hospitalRating) {
     let fourstar = 0;
     let fivestar = 0;
 
-    console.log(hospResult);
-
-    for (let i = 0; i< hospResult.length; i++) {
+    for (let i = 0; i< hospitalRating.length; i++) {
       //if statements to separate rating counts
-      if (hospitalRating[i] == "1.0") {
+      if (hospitalRating[i]["Hospital overall rating"] == "1.0") {
         onestar++;
-      } else if (hospitalRating[i] == "2.0") {
+      } else if (hospitalRating[i]["Hospital overall rating"] == "2.0") {
         twostar++;
-      }else if (hospitalRating[i] == "3.0") {
+      }else if (hospitalRating[i]["Hospital overall rating"] == "3.0") {
         threestar++;
-      }else if (hospitalRating[i] == "4.0") {
+      }else if (hospitalRating[i]["Hospital overall rating"] == "4.0") {
         fourstar++;
-      }else if (hospitalRating[i] == "5.0") {
+      }else if (hospitalRating[i]["Hospital overall rating"] == "5.0") {
         fivestar++;
       }
     }
     let ratings = [1.0, 2.0, 3.0, 4.0, 5.0]; 
     let stars = [onestar, twostar, threestar, fourstar, fivestar];
-
     let chartSpecs = [
     {
       y: stars,
       x: ratings,
-      type: 'bar'
+      type: 'bar',
+      color:'rgba(222,45,38,0.8)'
     }];
     Plotly.newPlot('bar', chartSpecs, {title: "Ratings of West Coast Hospitals", xaxis: {title: "Rating (1-5 scale)"}});
-
   });
  }
 
 // Initialize the hospital overview table
 init();
-
-
-// hospitals with 5 star ratings 

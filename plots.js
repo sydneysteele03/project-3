@@ -26,11 +26,10 @@ function createMarker(locationInfo, hospitalInfo){
   for (let i = 0; i < locationInfo.length; i++) {
     let location = locationInfo[i]
     let selectedHospital = hospitalInfo.filter((hospital) => {
-      // console.log(location.name)
-      // console.log(hospital["Hospital Name"])
+
       return location.name == hospital["Hospital Name"]
     })
-    console.log(selectedHospital)
+    
     let locationMarker = L.marker([location.latitude, location.longitude])
       .bindPopup(`<h4>Name:</h4> <h5>${location.name}</h5> <h4>Address:</h4> <h5>${location.address}</h5> 
       <h4>Rating:</h4> <h5>${selectedHospital[0]["Hospital overall rating"]}</h5>`)
