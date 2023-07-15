@@ -66,7 +66,8 @@ function createBarChart(hospitalRating) {
     let threestar = 0;
     let fourstar = 0;
     let fivestar = 0;
-    let topRated = []
+    let topRated = [];
+    let d = d3.select("#response");
 
     for (let i = 0; i< hospitalRating.length; i++) {
       //if statements to separate rating counts
@@ -80,7 +81,8 @@ function createBarChart(hospitalRating) {
         fourstar++;
       }else if (hospitalRating[i]["Hospital overall rating"] == "5.0") {
         fivestar++;
-        topRated.push(hospitalRating[i]["Hospital Name"]);
+        //topRated.push(hospitalRating[i]["Hospital Name"]);
+        d.append("h4").text(hospitalRating[i]["Hospital Name"]);
       }
     }
     let ratings = [1.0, 2.0, 3.0, 4.0, 5.0]; 
@@ -93,6 +95,7 @@ function createBarChart(hospitalRating) {
       marker: {color: 'rgb(173, 39, 9)'}
     }];
     Plotly.newPlot('bar', chartSpecs, {title: "Ratings of West Coast Hospitals", xaxis: {title: "Rating (1-5 scale)"}});
+    //d.append("h4").text(topRated);
   });
  }
 
