@@ -1,8 +1,5 @@
 // this creates the interactive drop down overview dashboard for each hospital in our dataset. 
 
-//let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv'
-//let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
-
 function init() {
   let dropdown = d3.select("#selDataset");
   //create dropdown using hospital names
@@ -15,7 +12,7 @@ function init() {
 
     let firstHospital = data[0]["Hospital Name"];
     demographicInfo(firstHospital);
-    createBarChart(firstHospital);
+    createBarChart(data);
     createPieChart(data);
   });
 }
@@ -23,8 +20,48 @@ function init() {
 // repeat for other hospital names
 function select(nextHospital) {
   demographicInfo(nextHospital);
-  createBarChart(nextHospital);
+  createBarChart(data);
   createPieChart(data);
+}
+
+//create bar chart of the top rated hospitals
+function createBarChart(response) {
+  let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
+  d3.csv(hospData).then((data) => {
+
+    // this all probably needs to be in a for loop or fixed when data array is made (?):
+    let hospital_name = data['Hospital Name'];
+    let hospital_rating = data["Hospital Overall Rating"];
+
+    let chartSpecs = [
+    {
+      y: hospital_rating,
+      x: hospital_name,
+      text: hospital_name,
+      type: 'bar',
+      //orientation: 'h',
+    }];
+    Plotly.newPlot('bar', chartSpecs, {title: "Top Rated hospitals on the West Coast", xaxis: {title: "Hospitals"}});
+  });
+ }
+
+ //create the demographics table for each hospital on dropdown menu
+function demographicInfo(hospitalInfo) {
+  let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv'
+  d3.csv(hospData).then((data) => {
+    let hospitalInfo = [];
+    for (let i = 0; i < data.length; i++) {
+      let demographics = d3.select("#response-hospInfo");
+      hospitalInfo.push([data[i]["Hospital Name"], data[i]["City"], data[i]["State"], data[i]['Hospital Type'], data[i]["Hospital Ownership"], data[i]["Hospital Overall Rating"]]);
+      let result = hospitalInfo[0];
+      //clear previous data
+      demographics.html("");
+      //get values and table info to match for overivew display 
+      for (r in result) {
+        demographics.append("h6").text(`${r.toUpperCase()}: ${result[r]}`);
+      };
+    }
+  });
 }
 
 //create the demographics table for each hospital on dropdown menu
@@ -57,29 +94,52 @@ function demographicInfo(hospitalName) {
 });
 }
 
-//create bar chart of the top rated hospitals
-function createBarChart(response) {
+//create bar chart of number of hospitals for each rating 0-5. 
+function createBarChart(hospitalRating) {
   let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
-  let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
   d3.csv(hospData).then((data) => {
-    d3.csv(geoData).then((data) => {
-    // set bar chart info
-      let hospital_name = data['Hospital Name'];
-      let hospital_rating = data["Hospital Overall Rating"];
+    // set bar chart info 
+    let hospResult = data.filter((hospital) => {
+      return hospitalRating == hospital['Hospital overall rating']
+    })
+    //initialize rating tallies
+    let onestar = 0;
+    let twostar = 0;
+    let threestar = 0;
+    let fourstar = 0;
+    let fivestar = 0;
+    let topRated = [];
+    let d = d3.select("#response");
 
-      let chartSpecs = [
-        {
-          y: hospital_rating,
-          x: hospital_name,
-          text: hospital_rating,
-          type: 'bar',
-          orientation: 'h',
-        }];
-        //make the plot 
-        Plotly.newPlot('bar', chartSpecs, {title: "", xaxis: {title: "Hospitals"}});
-    });
-    });
-   }
+    for (let i = 0; i< hospitalRating.length; i++) {
+      //if statements to separate rating counts
+      if (hospitalRating[i]["Hospital overall rating"] == "1.0") {
+        onestar++;
+      } else if (hospitalRating[i]["Hospital overall rating"] == "2.0") {
+        twostar++;
+      }else if (hospitalRating[i]["Hospital overall rating"] == "3.0") {
+        threestar++;
+      }else if (hospitalRating[i]["Hospital overall rating"] == "4.0") {
+        fourstar++;
+      }else if (hospitalRating[i]["Hospital overall rating"] == "5.0") {
+        fivestar++;
+        //topRated.push(hospitalRating[i]["Hospital Name"]);
+        d.append("h4").text(hospitalRating[i]["Hospital Name"]);
+      }
+    }
+    let ratings = [1.0, 2.0, 3.0, 4.0, 5.0]; 
+    let stars = [onestar, twostar, threestar, fourstar, fivestar];
+    let chartSpecs = [
+    {
+      y: stars,
+      x: ratings,
+      type: 'bar',
+      marker: {color: 'rgb(173, 39, 9)'}
+    }];
+    Plotly.newPlot('bar', chartSpecs, {title: "Ratings of West Coast Hospitals", xaxis: {title: "Rating (1-5 scale)"}});
+    //d.append("h4").text(topRated);
+  });
+ }
 
   // Creating pie chart of the different hospital ownership
   function createPieChart(ownership){
@@ -102,19 +162,19 @@ function createBarChart(response) {
       let fivestar = 0;
       let sixstar = 0;
   
-      for (let i = 0; i< hospital_owner.length; i++) {
+      for (let i = 0; i< owner.length; i++) {
         //if statements to separate rating counts
-        if (hospital_owner[i]["Hospital Ownership"] == ["Government - Hospital District or Authority"]) {
+        if (owner[i]["Hospital Ownership"] == ["Government - Hospital District or Authority"]) {
           onestar++;
-        } else if (hospital_owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Church"]) {
+        } else if (owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Church"]) {
           twostar++;
-        }else if (hospital_owner[i]["Hospital Ownership"] == ["Government - Hospital District or Authority"]) {
+        }else if (owner[i]["Hospital Ownership"] == ["Government - Hospital District or Authority"]) {
           threestar++;
-        }else if (hospital_owner[i]["Hospital Ownership"] == ["Government - Local"]) {
+        }else if (owner[i]["Hospital Ownership"] == ["Government - Local"]) {
           fourstar++;
-        }else if (hospital_owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Private"]) {
+        }else if (owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Private"]) {
           fivestar++;
-        }else if (hospital_owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Other"]) {
+        }else if (owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Other"]) {
           sixstar++;
       }
     }
@@ -122,15 +182,14 @@ function createBarChart(response) {
     let stars = [onestar, twostar, threestar, fourstar, fivestar, sixstar];
     console.log(ownership);
     console.log(stars);
-      //let hospital_name = data['Hospital Name'];
-      //let hospital_ownership = data["Hospital Ownership"];
         
       let data2 = [{
-            values: ownership,
-            labels: stars,
+            values: stars,
+            labels: ownership,
             type: 'pie',
             textposition: 'outside',
-            automargin: true
+            automargin: true,
+            title: 'Different Types of Hospital Ownership'
           }];
       
       var layout = [{
