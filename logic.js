@@ -92,10 +92,9 @@ function createBarChart(hospitalRating) {
       y: stars,
       x: ratings,
       type: 'bar',
-      marker: {color: 'rgb(173, 39, 9)'}
+      marker: {color: ['rgb(173, 39, 9)','rgb(173, 39, 9)', "rgb(247, 194, 2)", "rgb(2, 145, 247)", "rgb(33, 176, 11)"]}
     }];
     Plotly.newPlot('bar', chartSpecs, {title: "Ratings of West Coast Hospitals", xaxis: {title: "Rating (1-5 scale)"}});
-    //d.append("h4").text(topRated);
   });
  }
 
