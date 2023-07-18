@@ -39,40 +39,58 @@
         height="150"
       />
       <h1><FONT COLOR = "#8B0000">West Coast Hospital Care Analysis</FONT></h1>
-      <p>M&S Consulting analysis for Patient X to determine best hospitals on the West Coast near major cities. 
-        Contributing factors include rating, location proximity, numebr of beds, emergency care, and specialties. States included 
+      <p> Welcome to the West Coast Hospital Analysis by M&S Consulting! This can be used to determine best hospitals on the West Coast offering quality care. 
+        Contributing factors include rating, ownership, number of beds, emergency care, and specialties. States included 
       Washington, Oregon, and California. </p>
-      <p> Mirtha and Sydney Project 3</p>
+      <p> Mirtha and Sydney - Project 3</p>
     </div>
   </div>
 </div>
 
-<div id="map"></div>
-
+<div id="map"></div>  
+<div class = "row"> <h5>  </h5></div>
     <!-- create hospital overview chart dropdown -->
-    <div class="row">
-      <div class="col-md-2">
-        <div class="well">
-          <h5>Hospital Name:</h5>
-          <select id="selDataset" onchange="select(this.value)"></select>
-        </div>
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Hospital Overview</h3>
-          </div>
-          <div id="response-hospInfo" class="panel-body"></div>
-        </div>
-        <div class="col-md-5">
-          <div id="bar"></div>
-        </div>
+  <div class="row">
+    <div class="col-md-7">
+      <div class="well">
+        <h5>Hospital Name:</h5>
+        <select id="selDataset" onchange="select(this.value)"></select>
       </div>
+
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Hospital Overview</h3>
+        </div>
+        <div id="response-hospInfo" class="panel-body"></div>
+      </div>
+    </div>
   </div>
-  
+
+  <!-- top 5 results from bar chart-->
+<div class="row">
+  <div class="col-md-5">
+    <div id="bar"></div>
+
+  <div class = "row">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Top Rated Hospitals on the West Coast</h3>
+      </div>
+      <div id="response" class="panel-body"></div>
+    </div>
+  <!-- pie chart-->
+  <div class="row">
+    <div class="col-md-20">
+    <div id="pie"></div>
+  </div>
+  </div>
+</div>
+
+
+
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="logic.js"></script>
   
 </body>
-
-
 
 </html>
