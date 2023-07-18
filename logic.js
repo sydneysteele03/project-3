@@ -13,6 +13,7 @@ function init() {
     let firstHospital = data[0]["Hospital Name"];
     demographicInfo(firstHospital);
     createBarChart(data);
+    createPieChart(data);
   });
 }
 
@@ -20,6 +21,7 @@ function init() {
 function select(nextHospital) {
   demographicInfo(nextHospital);
   createBarChart(data);
+  createPieChart(data);
 }
 
 //create the demographics table for each hospital on dropdown menu
@@ -97,6 +99,69 @@ function createBarChart(hospitalRating) {
     Plotly.newPlot('bar', chartSpecs, {title: "Ratings of West Coast Hospitals", xaxis: {title: "Rating (1-5 scale)"}});
   });
  }
+
+  // Creating pie chart of the different hospital ownership
+  function createPieChart(ownership){
+    let hospData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_info_df.csv';
+    let geoData = 'https://raw.githubusercontent.com/sydneysteele03/project-3/main/westcoast_loc_df.csv'
+    d3.csv(hospData).then((data) => {
+    
+      // set pie chart info
+      let result = data.filter((hospital)=> {
+        return hospital_name = hospital["Hospital Name"]
+      })
+      let owner = data.filter((hospital)=> {
+        return hospital_owner = hospital["Hospital Ownership"]
+      })
+      
+      let onestar = 0;
+      let twostar = 0;
+      let threestar = 0;
+      let fourstar = 0;
+      let fivestar = 0;
+      let sixstar = 0;
+  
+      for (let i = 0; i< owner.length; i++) {
+        //if statements to separate rating counts
+        if (owner[i]["Hospital Ownership"] == ["Government - Hospital District or Authority"]) {
+          onestar++;
+        } else if (owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Church"]) {
+          twostar++;
+        }else if (owner[i]["Hospital Ownership"] == ["Government - Hospital District or Authority"]) {
+          threestar++;
+        }else if (owner[i]["Hospital Ownership"] == ["Government - Local"]) {
+          fourstar++;
+        }else if (owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Private"]) {
+          fivestar++;
+        }else if (owner[i]["Hospital Ownership"] == ["Voluntary non-profit - Other"]) {
+          sixstar++;
+      }
+    }
+    let ownership = ["Government - Hospital District or Authority", "Voluntary non-profit - Church", "Government - Hospital District or Authority", "Government - Local, Voluntary non-profit - Private", "Voluntary non-profit - Other"]; 
+    let stars = [onestar, twostar, threestar, fourstar, fivestar, sixstar];
+    console.log(ownership);
+    console.log(stars);
+        
+      let data2 = [{
+            values: stars,
+            labels: ownership,
+            type: 'pie',
+            textposition: 'outside',
+            automargin: true,
+            title: 'Different Types of Hospital Ownership'
+          }];
+      
+      var layout = [{
+            height: 400,
+            width: 400,
+            margin: {"t": 0, "b": 0, "l": 0, "r": 0},
+            showlegend: false
+            }];
+
+          Plotly.newPlot('pie', data2, layout); 
+  });
+ 
+} 
 
 // Initialize the hospital overview table
 init();
