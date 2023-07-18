@@ -1,5 +1,5 @@
 # project-3
-Project 3 for Mirtha, Sydney and Netsanet
+Project 3 for Mirtha and Sydney
 
 PLAN FOR PROJECT: 
 1. Clean datasets first to narrow down to columns we want 
